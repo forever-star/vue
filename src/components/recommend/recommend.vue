@@ -1,47 +1,31 @@
 <template>
-    <div class="recommend" ref="recommend">
-        <!--<scroll ref="scroll" class="recommend-content" :data="discList">-->
-            <!--<div>-->
-                <!--<div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">-->
-                    <!--<slider>-->
-                        <!--<div v-for="item in recommends">-->
-                            <!--<a :href="item.linkUrl">-->
-                                <!--<img class="needsclick" @load="loadImage" :src="item.picUrl">-->
-                            <!--</a>-->
-                        <!--</div>-->
-                    <!--</slider>-->
-                <!--</div>-->
-                <!--<div class="recommend-list">-->
-                    <!--<h1 class="list-title">热门歌单推荐</h1>-->
-                    <!--<ul>-->
-                        <!--<li @click="selectItem(item)" v-for="item in discList" class="item">-->
-                            <!--<div class="icon">-->
-                                <!--<img width="60" height="60" v-lazy="item.imgurl">-->
-                            <!--</div>-->
-                            <!--<div class="text">-->
-                                <!--<h2 class="name" v-html="item.creator.name"></h2>-->
-                                <!--<p class="desc" v-html="item.dissname"></p>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="loading-container" v-show="!discList.length">-->
-                <!--<loading></loading>-->
-            <!--</div>-->
-        <!--</scroll>-->
-        <!--<router-view></router-view>-->
+    <div class="recommend">
+        <div class="recommend-content">
+            <div class="slider-wrapper">
+                <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
+                    <slider>
+                        <div v-for="item in recommends">
+                            <a :href="item.linkUrl">
+                                <img class="needsclick" :src="item.picUrl">
+                            </a>
+                        </div>
+                    </slider>
+                </div>
+            </div>
+        </div>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-import {getRecommend} from '@/api/recommend'
-import {ERR_OK} from '@/api/config'
+    import {getRecommend} from '@/api/recommend'
+    import {ERR_OK} from '@/api/config'
+    import Slider from '@/base/slider/slider'
     export default {
         name: 'HelloWorld',
         data() {
             return {
-                msg: 'Welcome to Your Vue.js App'
+                recommends:[],
             }
         },
         created(){
@@ -53,9 +37,13 @@ import {ERR_OK} from '@/api/config'
                 getRecommend().then((res)=>{
                     if (res.code === ERR_OK){
                         console.log(res.data.slider)
+                        this.recommends=res.data.slider
                     }
                 })
             }
+        },
+        components:{
+            Slider
         }
     }
 </script>
