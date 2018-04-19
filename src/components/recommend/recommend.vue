@@ -2,6 +2,7 @@
     <div class="recommend">
         <div class="recommend-content">
             <div class="slider-wrapper">
+            <!--添加div才能获取到dom-->
                 <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
                     <slider>
                         <div v-for="item in recommends">
