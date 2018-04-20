@@ -1,20 +1,41 @@
 <template>
     <div class="recommend">
-        <div class="recommend-content">
-            <div class="slider-wrapper">
-            <!--添加div才能获取到dom-->
-                <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
-                    <slider>
-                        <div v-for="item in recommends">
-                            <a :href="item.linkUrl">
-                                <img class="needsclick" :src="item.picUrl">
-                            </a>
-                        </div>
-                    </slider>
+        <Scroll ref="scroll" class="recommend-content" :data="discList">
+        <!--添加div才能滑动-->
+            <div>
+                <div class="slider-wrapper">
+                    <!--添加div才能获取到dom-->
+                    <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
+                        <slider>
+                            <div v-for="item in recommends">
+                                <a :href="item.linkUrl">
+                                    <img @load="loadImage" :src="item.picUrl">  <!--class="needsclick" -->
+                                </a>
+                            </div>
+                        </slider>
+                    </div>
+
+                </div>
+                <!--热门歌单-->
+                <div class="recommend-list">
+                    <h1 class="list-title">热门歌单</h1>
+                    <ul>
+                        <li v-for="item in discList" class="item">
+                            <div class="icon">
+                                <img width="60px" height="60px" :src="item.imgurl"/>
+                            </div>
+                            <div class="text">
+                                <h2 class="name" v-html="item.creator.name"></h2>
+                                <p class="desc" v-html="item.dissname">
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+
                 </div>
             </div>
-        </div>
-        <router-view></router-view>
+        </Scroll>
     </div>
 </template>
 
@@ -22,37 +43,45 @@
     import {getRecommend, getDiscList} from '@/api/recommend'
     import {ERR_OK} from '@/api/config'
     import Slider from '@/base/slider/slider'
+    import Scroll from '@/base/scroll/scroll'
+
     export default {
         name: 'HelloWorld',
         data() {
             return {
-                recommends:[],
+                recommends: [],
+                discList: []
             }
         },
-        created(){
+        created() {
             this._getRecommend()
             this._getDiscList()
-
         },
-        methods:{
-            _getRecommend(){
-                getRecommend().then((res)=>{
-                    if (res.code === ERR_OK){
-                        this.recommends=res.data.slider
+        methods: {
+            _getRecommend() {
+                getRecommend().then((res) => {
+                    if (res.code === ERR_OK) {
+                        this.recommends = res.data.slider
                     }
                 })
             },
-            _getDiscList(){
-                getDiscList().then((res)=>{
-                    if (res.code === ERR_OK){
-                        console.log(res.data.slider)
-//                        this.recommends=res.data.slider
+            _getDiscList() {
+                getDiscList().then((res) => {
+                    if (res.code === ERR_OK) {
+                        this.discList = res.data.list
                     }
                 })
+            },
+            loadImage(){
+//                this.$refs.scroll.refresh()
+                if (!this.refreshFirst)
+                    this.$refs.scroll.refresh()
+                this.refreshFirst = true
             }
         },
-        components:{
-            Slider
+        components: {
+            Slider,
+            Scroll
         }
     }
 </script>

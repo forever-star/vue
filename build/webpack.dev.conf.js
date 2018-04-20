@@ -49,20 +49,15 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             poll: config.dev.poll,
         },
         before(apiRoutes) {
-            apiRoutes.get('/api/getDiscList', function (req, res) {
+            apiRoutes.get('/getDiscList', function (req, res) {
                 var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
-                // var url = 'www.baidu.com'
                 axios.get(url, {
                     headers: {
-                        referrer: 'https://y.qq.com/portal/playlist.html',
-                        authority: 'c.y.qq.com',
-                        scheme:'https'
-
+                        'referer':'https://y.qq.com/portal/playlist.html'
                     },
                     params: req.query
                 }).then((response) => {
                     res.json(response.data)
-                    console.log(response)
                 }).catch((e) => {
                     console.log(e)
                 })
