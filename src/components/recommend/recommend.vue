@@ -74,9 +74,11 @@
             },
             loadImage(){
 //                this.$refs.scroll.refresh()
-                if (!this.refreshFirst)
+                if (!this.refreshFirst){
                     this.$refs.scroll.refresh()
-                this.refreshFirst = true
+                    this.refreshFirst = true
+                }
+
             }
         },
         components: {
